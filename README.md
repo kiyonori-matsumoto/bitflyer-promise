@@ -11,6 +11,11 @@ bitflyer.getBalance()
 })
 ```
 
+## Set credential
+key and secret are specified by following order
+1. call bitflyer.setCredentials(key, secret);
+2. set Environment Variable BITFLYER_KEY and BITFLYER_SECRET
+
 ## With options
 ```javascript
 const bitflyer = require('bitflyer-promise');
@@ -29,3 +34,7 @@ bitflyer.sendChildOrder({
   console.error(err.message);
 })
 ```
+
+## any issues?
+please notify me on https://github.com/kiyonori-matsumoto/bitflyer-promise/issues
+
