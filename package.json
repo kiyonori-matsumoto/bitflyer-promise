@@ -1,0 +1,29 @@
+{
+  "name": "bitflyer-promise",
+  "version": "0.0.1",
+  "description": "Bitflyer API helper with Promise",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiyonori/bitflyer-promise.git"
+  },
+  "keywords": [
+    "bitcoin",
+    "bitflyer",
+    "promise"
+  ],
+  "author": "Kiyonori Matsumoto",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kiyonori/bitflyer-promise/issues"
+  },
+  "homepage": "https://github.com/kiyonori/bitflyer-promise#readme",
+  "dependencies": {
+    "crypto": "0.0.3",
+    "moment": "^2.17.1",
+    "request-promise-native": "^1.0.3"
+  }
+}
