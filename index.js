@@ -1,5 +1,5 @@
-const prv = require('./private');
-const pub = require('./public');
+const prv = require('./lib/private');
+const pub = require('./lib/public');
 
 const methods = Object.assign({}, prv, pub);
 methods.setCredentials  = (key, secret=null) => {
