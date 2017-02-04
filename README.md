@@ -13,6 +13,7 @@ bitflyer.getBalance()
 
 ## Set credential
 key and secret are specified by following order
+
 1. call bitflyer.setCredentials(key, secret);
 2. set Environment Variable BITFLYER_KEY and BITFLYER_SECRET
 
@@ -35,6 +36,9 @@ bitflyer.sendChildOrder({
 })
 ```
 
-## any issues?
-please notify me on https://github.com/kiyonori-matsumoto/bitflyer-promise/issues
+## Using streaming API
+Currently not supported.  
+Please use [bitflyer-node](https://www.npmjs.com/package/bitflyer-node)
 
+## Any issues?
+please notify me on https://github.com/kiyonori-matsumoto/bitflyer-promise/issues

@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kiyonori/bitflyer-promise.git"
+    "url": "https://github.com/kiyonori-matsumoto/bitflyer-promise.git"
   },
   "keywords": [
     "bitcoin",
@@ -18,9 +18,9 @@
   "author": "Kiyonori Matsumoto",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kiyonori/bitflyer-promise/issues"
+    "url": "https://github.com/kiyonori-matsumoto/bitflyer-promise/issues"
   },
-  "homepage": "https://github.com/kiyonori/bitflyer-promise#readme",
+  "homepage": "https://github.com/kiyonori-matsumoto/bitflyer-promise#readme",
   "dependencies": {
     "crypto": "0.0.3",
     "moment": "^2.17.1",
