@@ -1,7 +1,8 @@
 const prv = require('./lib/private');
 const pub = require('./lib/public');
+const prv_n = require('./lib/private_named')
 
-const methods = Object.assign({}, prv, pub);
+const methods = Object.assign({}, prv, pub, prv_n);
 methods.setCredentials  = (key, secret=null) => {
   if(typeof(key) === "string") {
     if(!secret) {

@@ -4,11 +4,8 @@
 const bitflyer = require('bitflyer-promise');
 
 bitflyer.getBalance()
-.then( (data) => {
-  console.log(data);
-}).catch( (err) => {
-  console.log(err.message);
-})
+.then(console.log)
+.catch(console.error)
 ```
 
 ## Set credential
@@ -29,11 +26,20 @@ bitflyer.sendChildOrder({
   size: 0.001,
   minute_to_expire: 30,
 })
-.then((data) => {
-  console.log(data);
-}).catch( (err) => {
-  console.error(err.message);
+.then(console.log)
+.catch(console.error)
+```
+
+or use shortend methods. (only in `'./lib/private_named.js'`)
+```javascript
+const bitflyer = require('bitflyer-promise');
+
+bitflyer.buy({
+  price: 100000,
+  size: 0.001
 })
+.then(console.log)
+.catch(console.error)
 ```
 
 ## Using streaming API
