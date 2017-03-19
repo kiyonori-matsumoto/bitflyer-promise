@@ -42,6 +42,20 @@ bitflyer.buy({
 .catch(console.error)
 ```
 
+you can retry method if error (or something) happened.  
+only the last request can issue by retry method(by each private methods.)
+```javascript
+bitflyer.sendChildOrder({
+  product_code: 'BTC_JPY',
+  child_order_type: 'LIMIT',
+  price: 10000,
+  size:  0.001
+}).catch( (e) => {
+  console.error(e);
+  return bitflyer.retry('sendChildOrder');
+})
+```
+
 ## Using streaming API
 Currently not supported.  
 Please use [bitflyer-node](https://www.npmjs.com/package/bitflyer-node)
