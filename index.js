@@ -1,6 +1,7 @@
 const prv = require('./lib/private');
 const pub = require('./lib/public');
 const prv_n = require('./lib/private_named')
+const retry = require('./lib/retry');
 
 const methods = Object.assign({}, prv, pub, prv_n);
 methods.setCredentials  = (key, secret=null) => {
@@ -15,5 +16,6 @@ methods.setCredentials  = (key, secret=null) => {
     throw "key and secret is required";
   }
 }
+methods.retry = retry.retry;
 
 module.exports = methods;
