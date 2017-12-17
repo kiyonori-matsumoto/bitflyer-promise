@@ -148,6 +148,26 @@ export class Bitflyer {
   public cancel_child_order(option: CancelChildOrderRequest): Promise<void> {
     return this.send_private_request('cancelchildorder', option);
   }
+
+  public send_parent_order(option: ParentOrderRequest): Promise<ParentOrderResponse> {
+    return this.send_private_request('sendparentorder', option);
+  }
+
+  public cancel_parent_order(option: CancelParentOrderRequest): Promise<void> {
+    return this.send_private_request('cancelparentorder', option);
+  }
+
+  public cancel_all_child_orders(option: CancelAllChildOrderRequest): Promise<void> {
+    return this.send_private_request('cancelallchildorders', option);
+  }
+
+  public get_child_orders(option: GetChildOrderRequest): Promise<GetChildOrderResponse[]> {
+    return this.send_private_request('getchildorders', option);
+  }
+
+  public get_parent_orders(option: GetParentOrderRequest): Promise<GetParentOrderResponse[]> {
+    return this.send_private_request('getparentorders', option);
+  }
 }
 
 export interface MarketResponse {
@@ -382,4 +402,81 @@ export interface ParentOrderRequest {
 
 export interface ParentOrderResponse {
   parent_order_acceptance_id: string;
+}
+
+export interface CancelParentOrderRequest {
+  /**必須。対象の注文のプロダクトです。マーケットの一覧で取得できる product_code または alias のいずれかを指定してください。
+   * parent_order_id または parent_order_acceptance_id のどちらか片方のみを指定してください。 */
+  product_code: string; 
+  /** キャンセルする親注文の ID です。 */
+  parent_order_id?: string;
+  /**新規の親注文を出す API の受付 ID です。指定された場合、対応する親注文をキャンセルします。 */
+  parent_order_acceptance_id: string; 
+}
+
+export interface CancelAllChildOrderRequest {
+  /**必須。対象の注文のプロダクトです。マーケットの一覧で取得できる product_code または alias のいずれかを指定してください。 */
+  roduct_code: string;
+}
+
+export interface GetChildOrderRequest extends PageFormat {
+  product_code?:string; /// マーケットの一覧で取得できる product_code または alias のいずれかを指定してください。 省略した場合の値は BTC_JPY です。
+  child_order_state?: /// 指定された場合、child_order_state がその値に一致する注文のみを返します。 指定されない場合、 ACTIVE な注文とそうでない注文の一覧を連結したものを返します。
+  ///次のいずれかを指定します。
+  'ACTIVE'| /// オープンな注文の一覧を取得します。
+  'COMPLETED'| /// 全額が取引完了した注文の一覧を取得します。
+  'CANCELED'| /// お客様がキャンセルした注文です。
+  'EXPIRED'| /// 有効期限に到達したため取り消された注文の一覧を取得します。
+  'REJECTED' /// 失敗した注文です。
+  child_order_id?:string; 
+  child_order_acceptance_id?: string; ///指定した ID に一致する注文を取得できます。
+  parent_order_id?: string;/// 指定された場合、その親注文に関連付けられている注文の一覧を取得します。
+}
+
+export interface GetChildOrderResponse {
+  id: number';
+  child_order_id: string;
+  product_code: string;
+  side: 'BUY'|'SELL';
+  child_order_type: string;
+  price: number;
+  average_price: number;
+  size: number;
+  child_order_state: string;
+  expire_date: string;
+  child_order_date: string;
+  child_order_acceptance_id: string;
+  outstanding_size: number;
+  cancel_size: number;
+  executed_size: number;
+  total_commission: number;
+}
+
+export interface GetParentOrderRequest extends PageFormat {
+  product_code: string;/// マーケットの一覧で取得できる product_code または alias のいずれかを指定してください。
+  parent_order_state?: ///指定された場合、parent_order_state がその値に一致する注文のみを返します。次のいずれかを指定します。
+  'ACTIVE'| ///オープンな注文の一覧を取得します。
+  'COMPLETED'| ///全額が取引完了した注文の一覧を取得します。
+  'CANCELED'| ///お客様がキャンセルした注文です。
+  'EXPIRED'| ///有効期限に到達したため取り消された注文の一覧を取得します。
+  'REJECTED' ///失敗した注文です。
+}
+
+export interface GetParentOrderResponse {
+  id: number;
+  parent_order_id: string;
+  product_code: string;
+  side: 'BUY'|'SELL';
+  parent_order_type: string;
+  price: number;
+  average_price: number;
+  size: string;
+  parent_order_state: string;
+  expire_date: string;
+  parent_order_date: string;
+  parent_order_acceptance_id: string;
+  outstanding_size: number;
+  cancel_size: number;
+  executed_size: number;
+  total_commission: number;
 }
