@@ -161,12 +161,20 @@ export class Bitflyer {
     return this.send_private_request('cancelallchildorders', option);
   }
 
-  public get_child_orders(option: GetChildOrderRequest): Promise<GetChildOrderResponse[]> {
+  public child_orders(option: GetChildOrderRequest): Promise<GetChildOrderResponse[]> {
     return this.send_private_request('getchildorders', option);
   }
 
-  public get_parent_orders(option: GetParentOrderRequest): Promise<GetParentOrderResponse[]> {
+  public parent_orders(option: GetParentOrderRequest): Promise<GetParentOrderResponse[]> {
     return this.send_private_request('getparentorders', option);
+  }
+
+  public parent_order(option: GetParentOrderDetailRequest): Promise<GetParentOrderDetailResponse> {
+    return this.send_private_request('getparentorder', option);
+  }
+
+  public get_executions(option: GetExecutionRequest): Promise<GetExecutionResponse[]> {
+    return this.send_private_request('getexecutions', option);
   }
 }
 
@@ -479,4 +487,50 @@ export interface GetParentOrderResponse {
   cancel_size: number;
   executed_size: number;
   total_commission: number;
+}
+
+export interface GetParentOrderDetailRequest {
+  parent_order_id?: string; ///対象の親注文の ID です。
+  parent_order_acceptance_id?: string; ///新規の親注文を出す API の受付 ID です。指定された場合、対応する親注文の詳細を返します。
+}
+
+export interface GetParentOrderDetailResponse {
+  id: number;
+  parent_order_id: string;
+  order_method?: 'SIMPLE'|'IFD'|'OCO'|'IFDOCO';
+  minute_to_expire?: number;
+  parameters: {
+    product_code: string;
+    /**必須。注文の執行条件です。以下の値のうちいずれかを指定してください。
+     * "LIMIT": 指値注文。
+     * "MARKET" 成行注文。
+     * "STOP": ストップ注文。
+     * "STOP_LIMIT": ストップ・リミット注文。
+     * "TRAIL": トレーリング・ストップ注文。 */
+    condition_type: 'LIMIT'|'MARKET'|'STOP'|'STOP_LIMIT'|'TRAIL';
+    
+    side: 'BUY'|'SELL';
+    size: number;
+    price?: number;
+    trigger_price?: number;
+    offset?: number;
+  }[];
+  parent_order_acceptance_id: string;
+}
+
+export interface GetExecutionRequest extends PageFormat {
+  product_code: string; ///マーケットの一覧で取得できる product_code または alias のいずれかを指定してください。
+  child_order_id?: string; ///省略可能。指定された場合、その注文に関連する約定の一覧を取得します。
+  child_order_acceptance_id?: string; ///省略可能。新規注文を出す API の受付 ID です。指定された場合、対応する注文に関連する約定の一覧を取得します。
+}
+
+export interface GetExecutionResponse {
+  id: number; // 37233,
+  child_order_id: string; // "JOR20150707-060559-021935",
+  side: 'BUY'|'SELL'; // "BUY",
+  price: number; // 33470,
+  size: number; // 0.01,
+  commission: number; // 0,
+  exec_date: string; // "2015-07-07T09:57:40.397",
+  child_order_acceptance_id: string;// "JRF20150707-060559-396699"
 }
