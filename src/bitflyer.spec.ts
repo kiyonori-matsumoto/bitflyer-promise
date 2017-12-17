@@ -5,8 +5,10 @@ import { expect } from 'chai';
 
 import * as nock from 'nock';
 import { fail } from 'assert';
+import { ChildOrderRequest } from '../index';
 
 const base = 'https://api.bitflyer.jp';
+nock.disableNetConnect();
 
 describe('Bitflyer', () => {
   let bf: Bitflyer;
@@ -54,6 +56,66 @@ describe('Bitflyer', () => {
       .catch(e => {
         expect(e.statusCode).to.equals(500);
       })
+    })
+  })
+
+  describe('#send_child_order', () => {
+    beforeEach(() => {
+      bf = new Bitflyer('key', 'secret');
+    })
+    it('can request', () => {
+      const req: ChildOrderRequest = {
+        product_code: "BTC_JPY",
+        child_order_type: "LIMIT",
+        side: "BUY",
+        price: 30000,
+        size: 0.1,
+        minute_to_expire: 10000,
+        time_in_force: "GTC"
+      }
+
+      const res = {
+        "child_order_acceptance_id": "JRF20150707-050237-639234"
+      }
+      
+      const scope = nock(base)
+      .post('/v1/me/sendchildorder', req, {reqheaders: {'ACCESS-KEY': 'key'}})
+      .reply(200, res)
+
+      return bf.send_child_order(req).then(data => {
+        expect(data).to.deep.equal(res);
+        expect(scope.isDone()).is.true;
+      })
+    })
+
+    it('throws if key is not', () => {
+      bf = new Bitflyer('key', 'secret');
+      const req: ChildOrderRequest = {
+        product_code: "BTC_JPY",
+        child_order_type: "LIMIT",
+        side: "BUY",
+        price: 30000,
+        size: 0.1,
+        minute_to_expire: 10000,
+        time_in_force: "GTC"
+      }
+
+      const res = {
+        "child_order_acceptance_id": "JRF20150707-050237-639234"
+      }
+      
+      const scope = nock(base)
+      .post('/v1/me/sendchildorder', req, {reqheaders: {'ACCESS-KEY': 'key'}})
+      .reply(200, res)
+
+      return bf.send_child_order(req)
+      .then(() => fail)
+      .catch((err) => {
+        expect(err).not.to.be.null;
+        expect(err.message).to.match(/\skey\s/)
+      })
+
+
     })
   })
 })

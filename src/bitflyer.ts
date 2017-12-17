@@ -95,8 +95,6 @@ export class Bitflyer {
     return rp(options).then(data => JSON.parse(data));
   }
 
-  
-
   public permissions(): Promise<string[]> {
     return this.send_private_request('getpermissions');
   }
@@ -176,6 +174,19 @@ export class Bitflyer {
   public get_executions(option: GetExecutionRequest): Promise<GetExecutionResponse[]> {
     return this.send_private_request('getexecutions', option);
   }
+
+  public get_positions(option: GetPositionRequest): Promise<GetPositionResponse[]> {
+    return this.send_private_request('getpositions', option);
+  }
+
+  public get_collateral_history(option: PageFormat): Promise<CollateralHistoryResponse[]> {
+    return this.send_private_request('getcollateralhistory', option);
+  }
+
+  public get_trading_commission(option: GetTradingCommissionRequest): Promise<GetTradingCommissionResponse> {
+    return this.send_private_request('gettradingcommission', option);
+  }
+
 }
 
 export interface MarketResponse {
@@ -442,7 +453,7 @@ export interface GetChildOrderRequest extends PageFormat {
 }
 
 export interface GetChildOrderResponse {
-  id: number';
+  id: number;
   child_order_id: string;
   product_code: string;
   side: 'BUY'|'SELL';
@@ -533,4 +544,38 @@ export interface GetExecutionResponse {
   commission: number; // 0,
   exec_date: string; // "2015-07-07T09:57:40.397",
   child_order_acceptance_id: string;// "JRF20150707-060559-396699"
+}
+
+export interface GetPositionRequest {
+  product_code: 'FX_BTC_JPY';
+}
+
+export interface GetPositionResponse {
+  product_code: "FX_BTC_JPY";
+  side: "BUY"|'SELL';
+  price: number;
+  size: number;
+  commission: number;
+  swap_point_accumulate: number;
+  require_collateral: number;
+  open_date: string;
+  leverage: number;
+  pnl: number;
+}
+
+export interface CollateralHistoryResponse {
+  id: number;
+  currency_code: string;
+  change: number;
+  amount: number;
+  reason_code: string;
+  date: string;
+}
+
+export interface GetTradingCommissionRequest {
+  product_code: string;
+}
+
+export interface GetTradingCommissionResponse {
+  commission_rate: number;
 }
