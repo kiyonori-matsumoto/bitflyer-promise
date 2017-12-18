@@ -40,7 +40,7 @@ jobs:
     - run: npm run test_js
   deploy:
     docker:
-    -image: node:8
+    - image: node:8
     steps:
     - checkout
     # Download and cache dependencies
