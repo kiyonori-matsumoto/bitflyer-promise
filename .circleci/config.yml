@@ -19,10 +19,10 @@ jobs:
     - run: npm run build
     - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
     - persist_to_workspace:
-      root: .
-      paths:
-        - dist/*
-        - .npmrc
+        root: .
+        paths:
+          - dist/*
+          - .npmrc
   test:
     docker:
     - image: node:8
@@ -35,7 +35,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
     - attach_workspace:
-      at: $CIRCLE_WORKING_DIRECTORY
+        at: $CIRCLE_WORKING_DIRECTORY
     - run: npm run test
     - run: npm run test_js
   deploy:
@@ -50,7 +50,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
     - attach_workspace:
-      at: $CIRCLE_WORKING_DIRECTORY
+        at: $CIRCLE_WORKING_DIRECTORY
     - run: npm publish
       
 
