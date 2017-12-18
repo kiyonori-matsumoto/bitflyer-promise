@@ -1,11 +1,10 @@
-import {Bitflyer} from './bitflyer';
+import {Bitflyer, ChildOrderRequest} from './bitflyer';
 
 import 'mocha';
 import { expect } from 'chai';
 
 import * as nock from 'nock';
 import { fail } from 'assert';
-import { ChildOrderRequest } from '../index';
 
 const base = 'https://api.bitflyer.jp';
 nock.disableNetConnect();
@@ -89,7 +88,7 @@ describe('Bitflyer', () => {
     })
 
     it('throws if key is not', () => {
-      bf = new Bitflyer('key', 'secret');
+      bf = new Bitflyer();
       const req: ChildOrderRequest = {
         product_code: "BTC_JPY",
         child_order_type: "LIMIT",
@@ -100,22 +99,49 @@ describe('Bitflyer', () => {
         time_in_force: "GTC"
       }
 
-      const res = {
-        "child_order_acceptance_id": "JRF20150707-050237-639234"
-      }
-      
-      const scope = nock(base)
-      .post('/v1/me/sendchildorder', req, {reqheaders: {'ACCESS-KEY': 'key'}})
-      .reply(200, res)
-
       return bf.send_child_order(req)
-      .then(() => fail)
-      .catch((err) => {
+      .then(() => fail('illegal state'), (err) => {
         expect(err).not.to.be.null;
         expect(err.message).to.match(/\skey\s/)
       })
+    })
 
-
+    describe('mock environment', () => {
+      let env: any;
+      before(() => {
+        env = process.env;
+        process.env.BITFLYER_KEY = 'test';
+        process.env.BITFLYER_SECRET = 'foobar';
+      })
+      it('can set key if environment is set', () => {
+        bf = new Bitflyer();
+        const req: ChildOrderRequest = {
+          product_code: "BTC_JPY",
+          child_order_type: "LIMIT",
+          side: "BUY",
+          price: 30000,
+          size: 0.1,
+          minute_to_expire: 10000,
+          time_in_force: "GTC"
+        }
+  
+        const res = {
+          "child_order_acceptance_id": "JRF20150707-050237-639234"
+        }
+        
+        const scope = nock(base)
+        .post('/v1/me/sendchildorder', req, {reqheaders: {'ACCESS-KEY': 'test'}})
+        .reply(200, res)
+  
+        return bf.send_child_order(req).then(data => {
+          console.log(data);
+          expect(data).to.deep.equal(res);
+          expect(scope.isDone()).is.true;
+        })
+      })
+      after(() => {
+        process.env = env;
+      })
     })
   })
 })

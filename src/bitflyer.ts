@@ -15,11 +15,10 @@ export class Bitflyer {
   }
     
   public set_credentials(key?: string | {key: string, secret: string}, secret: string = '') {
-    if (!key) {
+    if (!key && !secret) {
       this.key = process.env.BITFLYER_KEY || '';
       this.secret = process.env.BITFLYER_SECRET || '';
-    }
-    if (typeof key === 'string') {
+    } else if (typeof key === 'string') {
       this.key = key;
       this.secret = secret;
     } else {
@@ -76,7 +75,7 @@ export class Bitflyer {
 
   private send_private_request(p: string, query?: any) {
     if(!this.key || !this.secret) {
-      throw new Error('private method needs key and secret');
+      return Promise.reject(new Error('private method needs key and secret'));
     }
     const timestamp = Date.now().toString();
     const method = (/^get/.test(p)) ? 'GET' : 'POST';
