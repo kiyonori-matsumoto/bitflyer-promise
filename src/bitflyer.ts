@@ -2,6 +2,10 @@ import * as rp from 'request-promise-native';
 import * as crypto from 'crypto';
 import * as qs from 'querystring';
 
+const AsyncLock = require('async-lock');
+
+const lock = new AsyncLock();
+
 export class Bitflyer {
   private key: string;
   private secret: string;
@@ -92,7 +96,9 @@ export class Bitflyer {
     if(body && body !== "") {
       options.body = body;
     }
-    return rp(options).then(data => JSON.parse(data));
+    return lock.acquire(this.key, () => 
+      rp(options).then(data => JSON.parse(data))
+    )
   }
 
   public permissions(): Promise<string[]> {
