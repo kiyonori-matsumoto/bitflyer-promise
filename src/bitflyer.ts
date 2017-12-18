@@ -15,6 +15,10 @@ export class Bitflyer {
   }
     
   public set_credentials(key?: string | {key: string, secret: string}, secret: string = '') {
+    if (!key) {
+      this.key = process.env.BITFLYER_KEY || '';
+      this.secret = process.env.BITFLYER_SECRET || '';
+    }
     if (typeof key === 'string') {
       this.key = key;
       this.secret = secret;
