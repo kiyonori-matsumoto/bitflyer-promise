@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
-    "test_js": "mocha dist/src/**/*.spec.js"
+    "test_js": "mocha dist/**/*.spec.js"
   },
   "repository": {
     "type": "git",
